@@ -16,103 +16,112 @@ import math
 class man():
 
     def __init__(self):
+
         #take the no. of rooms as input
         self.n_rooms = 22 
 
         ######## ----- Initializing datastorages structures ----- ########
 
-        #initialize the p_time array
+        # initialize the p_time array or load the array stored as csv file
         self.p_arr = pd.read_csv('time-value.csv')#np.zeros((n_rooms,n_rooms))
         self.p_arr = self.p_arr.iloc[:,1:]
         self.p_arr = self.p_arr.to_numpy()
-        #print(p_arr)
-        #initialise the q_value array
+        
+        # initialise the q_value array
         self.q_arr = pd.read_csv('q-value.csv')#np.zeros((n_rooms,n_rooms))
         self.q_arr = self.q_arr.iloc[:,1:]
         self.q_arr = self.q_arr.to_numpy()
-        #initialize the no. of visit array for average time
+
+        # initialize the no. of visit array for average time
         self.p_time_visit = np.zeros((self.n_rooms,self.n_rooms))
 
         # room_state array
         self.r_arr = []
-        #room piority array
+
+        # room piority array
         self.prior = [0,0,1,1,0,1,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0]
 
 
-        #initializing each room state
+        # initializing each room state
         for i in range(self.n_rooms):
             #e = input("enter priority of room ")
             st = state.state(self.prior[i])
             self.r_arr.append(st)
 
-        #learning rate
+        # learning rate
         self.alpha = .5 #input("Enter the learning rate:")
-        #discount rate
+        # discount rate
         self.gamma = .8 #input("Enter the discount value")
 
-        #creating a worker class object
+        # creating a worker class object
         self.Worker = worker.worker((self.n_rooms),self.alpha, self.gamma)
+
+
+    ##### ------------- Defining the function to train the model ----------- #####
+
 
     def trainer(self):
 
-        #no. of times the robot goes on delivery
+        #no. of times the robot goes on delivery or the no. of delivery cycles
         epoch =  30000 #input("Enter the number of epochs")
 
         #training the model or estimating the q-values for the state
         for _ in range(epoch):
 
+            # print the no. of epochs
             print("epoch no.",_)
-            #total reward the robot gets in a delivery
+
+            # total reward the robot gets in a single delivery cycle
             total_reward = 0 
 
-            #create an array to store the order in which the delivery is made.
+            # create an array to store the order in which the delivery is made.
             mod_del = []
 
-            #initializing a variable to hold current room number
+            # initializing a variable to hold current room number
             curr_room = 0
-            #initializing a variable to hold the previous room number -- needed for updating q-value
-            pre_room = 0
+
+            # initializing a variable to hold the previous room number -- needed for updating q-value
+            pre_room = 0                 
             
-            
-            #start from initial position
-            # 
-            # randomly  making a set of delivery orders    
-            # choosing the no. of rooms in a single delivery
+            # randomly choosing the no. of rooms in a single delivery
             n = random.randint(1,self.n_rooms-9)
-            # choosing 'n' rooms (we choose the rooms to deliver to by randomly picking room numbers)
-            #random sampling for room numbers
-            del_set = random.sample(range(1,self.n_rooms),n)
+            # choosing 'n' rooms by random sampling(we choose the rooms to deliver to by randomly picking room numbers)
+            del_set = random.sample(range(1,self.n_rooms),n)            
             
-            
+            # display the rooms to which the delivery 
             print(del_set)  
+
             arr = []
-            #condition for checking if there is still room to deliver to
+
+            # condition for checking if there is still room to deliver to
             while(len(del_set)>0):
 
-                #set previous room to current room
+                # set previous room to current room
                 pre_room = curr_room        
 
-                #removing the visited room from array except for the first case.
-                #in the first case, the robot starts from initial position, which is taken as room zero
-                #room 0 is not in the delivery set
+                # removing the visited room from array except for the first case, which is not in delivery set
                 if len(del_set) != 0:    
-                    #ensuring its not room zero
+                    # ensuring its not room zero  -->this is needed since removing room zero which is not present gives error
                     if curr_room != 0:
-                        #removing the visited room                
+                        # removing the visited room                
                         del_set.remove(curr_room)
                 
-                #set current room to the action we took based on q-value
+                # set current room to the action we took based on q-value
                 curr_room = self.Worker.choose_action(del_set,self.q_arr,curr_room)
-                #increamenting the no. of visit from pre_room to curre_room
+
+                # increamenting the no. of visit from pre_room to curre_room
                 self.p_time_visit[pre_room][curr_room] = self.p_time_visit[pre_room][curr_room] + 1
-                #appending the visted room to know the order of visiting/delivery
+
+                # appending the visted room to know the order of visiting/delivery
                 mod_del.append(curr_room)  
                 
 
                      
-                
+                ##### ------ ROS code for controlling operations of robot ----- #####
+
                 #take the co-ordinates of current room from csv file and make a Pose object
                 try:
+                    # initialise the mov_base node
                     rospy.init_node('movebase_client_py')\
 
                     My_class = cooo()
