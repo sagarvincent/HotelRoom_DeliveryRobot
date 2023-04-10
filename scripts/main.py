@@ -44,7 +44,7 @@ class man():
 
         # initializing each room state
         for i in range(self.n_rooms):
-            #e = input("enter priority of room ")
+            
             st = state.state(self.prior[i])
             self.r_arr.append(st)
 
@@ -85,6 +85,7 @@ class man():
             
             # randomly choosing the no. of rooms in a single delivery
             n = random.randint(1,self.n_rooms-9)
+
             # choosing 'n' rooms by random sampling(we choose the rooms to deliver to by randomly picking room numbers)
             del_set = random.sample(range(1,self.n_rooms),n)            
             
@@ -124,16 +125,22 @@ class man():
                     # initialise the mov_base node
                     rospy.init_node('movebase_client_py')\
 
+                    # object for giving naviation goals to robot
                     My_class = cooo()
 
+                    # set the attributes of the object
                     room_lsit = My_class.roomlist()
                     length = len(room_lsit)
                     My_class.amcl_poses()   
-                    #time_Elapsed_for_each_room=np.zeros((length+1,length+1))        #print("pose",My_class.posx)    
+
                     i=0
+                    # repeat for all rooms
                     while i<length:
+                        
                         print("going to room no:",curr_room)
                         current_goal=room_lsit[curr_room]
+                        
+                        # store the time from which delivery to each room starts
                         start = time.time()
                         print(start)
                         result = My_class.movebase_client(current_goal)
@@ -142,7 +149,8 @@ class man():
                         r_target_x=round(My_class.goal.target_pose.pose.position.x,2)
                         r_target_y=round(My_class.goal.target_pose.pose.position.y,2)
                         print("targets",r_target_x,r_target_y)
-                
+
+                        # approximate the position achieved by the robot
                         if result and (math.isclose(r_target_x,My_class.posx,abs_tol=0.3) and math.isclose(r_target_y,My_class.posy,abs_tol=0.3)):
                             rospy.loginfo("Goal execution done!")
                             i+=1
