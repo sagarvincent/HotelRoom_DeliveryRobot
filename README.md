@@ -16,10 +16,10 @@ Software/Packages required : ROS-noetic, Gazebo, gmapping, navigation-stack, num
 
 1. ROS-noetic installation
 
-sudo apt update && sudo apt install -y curl gnupg2 lsb-release
-sudo apt install curl
-curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+ sudo apt update && sudo apt install -y curl gnupg2 lsb-release
+ sudo apt install curl
+ curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+ sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 
 sudo apt update
 sudo apt install -y ros-noetic-desktop-full
@@ -43,11 +43,11 @@ If the output is empty, it means amcl is not on path. If you install amcl sepera
 As part of this we also have to install the move_base_msgs package. Use the follwoing command :
  sudo apt-get install ros-noetic-move-base-msgs
  source ~/.bashrc
- 
-![myrobot v2](https://user-images.githubusercontent.com/34794384/128828685-a920a91f-5c05-4c24-ba0a-f219379fc0f2.png)
 
-### Simple differential drive robot modelled in Fusion360
-### Converted to URDF using fusion2urdf plugin.
+
+### Simple differential drive robot modelled in Fusion360 converted to URDF using fusion2urdf plugin.
+
+![myrobot v2](https://user-images.githubusercontent.com/34794384/128828685-a920a91f-5c05-4c24-ba0a-f219379fc0f2.png)
 
 
 
