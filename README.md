@@ -34,15 +34,15 @@ Software/Packages required : ROS-noetic, Gazebo, gmapping, navigation-stack, num
 
 2. Navigation stack installation
 
-sudo apt-get install ros-noetic-navigation
+`sudo apt-get install ros-noetic-navigation`
 
 We need to use amcl package as part of this project. To ensure its properly installed use the follwoing command : rospack find amcl
-The output should be : ros/noetic/share/amcl
-If the output is empty, it means amcl is not on path. If you install amcl seperately you need to add that folder path, if you installed as above, add set the rospath in ~/.bashrc file as : export ROS_PACKAGE_PATH=/opt/ros/noetic/share , then source the file as : source ~/.bashrc
+The output should be : `ros/noetic/share/amcl`
+If the output is empty, it means amcl is not on path. If you install amcl seperately you need to add that folder path, if you installed as above, add set the rospath in `~/.bashrc` file as : `export ROS_PACKAGE_PATH=/opt/ros/noetic/share` , then source the file as : `source ~/.bashrc`
 
 As part of this we also have to install the move_base_msgs package. Use the follwoing command :
- sudo apt-get install ros-noetic-move-base-msgs
- source ~/.bashrc
+ `sudo apt-get install ros-noetic-move-base-msgs`
+ `source ~/.bashrc`
 
 
 ### Simple differential drive robot modelled in Fusion360 converted to URDF using fusion2urdf plugin.
