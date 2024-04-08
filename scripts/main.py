@@ -43,8 +43,7 @@ class man():
 
 
         # initializing each room state
-        for i in range(self.n_rooms):
-            
+        for i in range(self.n_rooms):            
             st = state.state(self.prior[i])
             self.r_arr.append(st)
 
@@ -61,6 +60,12 @@ class man():
 
 
     def trainer(self):
+
+        ##### ----- Conduct checks to ensure no error ----- #####
+
+    
+        
+        ##### ----- Conduct checks to ensure no error ----- #####
 
         #no. of times the robot goes on delivery or the no. of delivery cycles
         epoch =  30000 #input("Enter the number of epochs")
@@ -203,7 +208,32 @@ class man():
 
     def test(self):
 
-        order_no = int(input("Enter no. of orders: "))
+        
+        order_no = int(input("Enter no. of orders to be delivered: "))
+        
+        ##### ----- Conduct checks to ensure no error ----- #####
+
+        # - check if the no. orders are within the limit
+        self.room_no = 22
+        if order_no > self.room_no:
+            flag = True
+            while(flag):
+                print("The no of orders is above the permitted limit. Please enter a valid no. or press Q to quit.")
+                order_no = input("Enter no. of orders to be delivered: ")
+                if order_no == "q":
+                    break
+                else:
+                    try:
+                        order_no = int(order_no)
+                        if(order_no<self.room_no):
+                            flag = False
+                    except:
+                        print("Error: Entered value is not an integer.")
+                
+        
+        ##### ----- Conduct checks to ensure no error ----- #####
+
+        
         order_list = []
         for i in range(order_no):
             o = int(input("Enter room no. :"))
